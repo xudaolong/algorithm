@@ -1,0 +1,25 @@
+{
+  "cSpell.words": [
+    "corejs",
+    "execa",
+    "nircmd",
+    "algorithm",
+    "postbuild",
+    "prebuild",
+    "storyshots",
+    "stylelint",
+    "svgaplayerweb",
+    "typeof"
+  ],
+  "eslint.enable": true,
+  "eslint.packageManager": "yarn",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    { "language": "typescript", "autoFix": true },
+    { "language": "typescriptreact", "autoFix": true }
+  ],
+  "eslint.workingDirectories": [
+    { "directory": "packages/*", "changeProcessCWD": true }
+  ]
+}
