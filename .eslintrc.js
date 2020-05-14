@@ -41,7 +41,7 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        endOfLine: 'crlf'
+        endOfLine: 'auto'
       }
     ],
     '@typescript-eslint/interface-name-prefix': 'off',

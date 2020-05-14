@@ -20,6 +20,5 @@
     "useBabel": true,
     "babelCore": "@babel/core"
   },
-  "include": [],
   "exclude": ["node_modules", "dist"]
 }
