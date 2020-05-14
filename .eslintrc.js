@@ -44,7 +44,9 @@ module.exports = {
         endOfLine: 'crlf'
       }
     ],
-    '@typescript-eslint/interface-name-prefix': 'off'
+    '@typescript-eslint/interface-name-prefix': 'off',
+    'no-dupe-class-members': 'off',
+    '@typescript-eslint/no-dupe-class-members': ['error']
   },
   overrides: [
     {

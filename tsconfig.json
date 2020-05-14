@@ -20,6 +20,6 @@
     "useBabel": true,
     "babelCore": "@babel/core"
   },
-  "include": ["packages", "jest-dom/extend-expect"],
+  "include": [],
   "exclude": ["node_modules", "dist"]
 }

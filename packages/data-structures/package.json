@@ -1,0 +1,29 @@
+{
+  "name": "@algorithm/data-structures",
+  "version": "1.0.0",
+  "private": false,
+  "description": "",
+  "author": "xudaolong@vip.qq.com (github.com)",
+  "license": "MIT",
+  "main": "src/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "src",
+    "tpls"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/ "
+  },
+  "scripts": {
+    "template": "node ./src/index.js"
+  },
+  "dependencies": {
+    "@algorithm/utils": "^1.0.0",
+    "exec-sh": "^0.3.2",
+    "sao": "^1.7.0"
+  }
+}

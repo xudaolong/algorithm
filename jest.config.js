@@ -12,7 +12,7 @@ module.exports = {
   },
   globals: {
     'ts-jest': {
-      extends: './babel.config.js'
+      babelConfig: true
     }
   },
   moduleFileExtensions: ['ts', 'tsx', 'js'],
