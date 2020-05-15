@@ -71,9 +71,6 @@ export default class Graph {
     return this
   }
 
-  /**
-   * @param {GraphEdge} edge
-   */
   deleteEdge(edge: GraphEdge) {
     // Delete edge from the list of edges.
     if (this.edges[edge.getKey()]) {
@@ -90,11 +87,6 @@ export default class Graph {
     endVertex.deleteEdge(edge)
   }
 
-  /**
-   * @param {GraphVertex} startVertex
-   * @param {GraphVertex} endVertex
-   * @return {(GraphEdge|null)}
-   */
   findEdge(startVertex: GraphVertex, endVertex: GraphVertex): GraphEdge | null {
     const vertex = this.getVertexByKey(startVertex.getKey())
 
@@ -168,7 +160,7 @@ export default class Graph {
         adjacencyMatrix[vertexIndex][neighborIndex] = this.findEdge(
           vertex,
           neighbor
-        ).weight
+        )?.weight
       })
     })
 

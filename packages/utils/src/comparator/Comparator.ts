@@ -14,7 +14,10 @@ export default class Comparator {
    * @param {(string|number)} b
    * @returns {number}
    */
-  static defaultCompareFunction(a, b) {
+  static defaultCompareFunction(
+    a: string | number,
+    b: string | number
+  ): number {
     if (a === b) {
       return 0
     }
@@ -28,7 +31,7 @@ export default class Comparator {
    * @param {*} b
    * @return {boolean}
    */
-  equal(a, b) {
+  equal(a: any, b: any): boolean {
     return this.compare(a, b) === 0
   }
 
@@ -38,7 +41,7 @@ export default class Comparator {
    * @param {*} b
    * @return {boolean}
    */
-  lessThan(a, b) {
+  lessThan(a: any, b: any): boolean {
     return this.compare(a, b) < 0
   }
 
@@ -48,7 +51,7 @@ export default class Comparator {
    * @param {*} b
    * @return {boolean}
    */
-  greaterThan(a, b) {
+  greaterThan(a: any, b: any): boolean {
     return this.compare(a, b) > 0
   }
 
@@ -58,7 +61,7 @@ export default class Comparator {
    * @param {*} b
    * @return {boolean}
    */
-  lessThanOrEqual(a, b) {
+  lessThanOrEqual(a: any, b: any): boolean {
     return this.lessThan(a, b) || this.equal(a, b)
   }
 
@@ -68,7 +71,7 @@ export default class Comparator {
    * @param {*} b
    * @return {boolean}
    */
-  greaterThanOrEqual(a, b) {
+  greaterThanOrEqual(a: any, b: any): boolean {
     return this.greaterThan(a, b) || this.equal(a, b)
   }
 

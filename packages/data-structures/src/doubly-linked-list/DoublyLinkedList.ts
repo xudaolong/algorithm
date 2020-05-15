@@ -1,136 +1,167 @@
 import DoublyLinkedListNode from './DoublyLinkedListNode'
 import Comparator from '@algorithm/utils/src/comparator/Comparator'
 
-export default class DoublyLinkedList {
-  head: any
-  tail: any
-  compare: any
+/**
+ * 双向链表
+ * - 若干个节点组成，每个节点包含上一个节点（head） 和下一个节点（tail）
+ */
+export default class DoublyLinkedList<T> {
+  // 仅当维护增删改查用
+  head: DoublyLinkedListNode<T> | null // 相对当前节点的上一个节点
+  tail: DoublyLinkedListNode<T> | null // 相对当前节点的下一个节点
+  compare: Comparator
 
+  /**
+   * 无需指定链表的长度
+   */
   constructor(comparatorFunction?: Function) {
     this.head = null
     this.tail = null
-
     this.compare = new Comparator(comparatorFunction)
   }
 
-  prepend(value: any): DoublyLinkedList {
-    // Make new node to be a head.
-    const newNode = new DoublyLinkedListNode(value, this.head)
+  /**
+   *  左添加（代替当前上一个节点）时需要同时维护 head 和 tail 分支
+   *  - 处理新节点的next和当前节点的previous
+   */
+  prepend(value: T): DoublyLinkedList<T> {
+    const node = new DoublyLinkedListNode(value, this.head, null)
 
-    // If there is head, then it won't be head anymore.
-    // Therefore, make its previous reference to be new node (new head).
-    // Then mark the new node as head.
-    if (this.head) {
-      this.head.previous = newNode
-    }
-    this.head = newNode
-
-    // If there is no tail yet let's make new node a tail.
-    if (!this.tail) {
-      this.tail = newNode
-    }
-
-    return this
-  }
-
-  append(value: any): DoublyLinkedList {
-    const newNode = new DoublyLinkedListNode(value)
-
-    // If there is no head yet let's make new node a head.
+    // 空链表时标志头尾为自身
     if (!this.head) {
-      this.head = newNode
-      this.tail = newNode
-
+      this.head = node
+      this.tail = node
       return this
     }
 
-    // Attach new node to the end of linked list.
-    this.tail.next = newNode
-
-    // Attach current tail to the new node's previous reference.
-    newNode.previous = this.tail
-
-    // Set new node to be the tail of linked list.
-    this.tail = newNode
+    // 若非空链表时，则切换头的指向
+    this.head.previous = node
+    this.head = node
 
     return this
   }
 
-  delete(value: any): DoublyLinkedListNode {
+  /**
+   *  右添加时需要同时维护 head 和 tail 分支
+   *  - 处理新节点的previous和当前节点的next
+   */
+  append(value: T): DoublyLinkedList<T> {
+    const node = new DoublyLinkedListNode(value, null, this.tail)
+
+    // 空链表时标志头尾为自身
+    if (!this.tail) {
+      this.head = node
+      this.tail = node
+      return this
+    }
+
+    // 若非空链表时，则切换尾的指向
+    this.tail.next = node
+    this.tail = node
+
+    return this
+  }
+
+  /**
+   * 删除时需要同时维护 head 和 tail 分支
+   */
+  delete(value: T): DoublyLinkedListNode<T> | null {
+    // 空链表
     if (!this.head) {
       return null
     }
 
-    let deletedNode = null
-    let currentNode = this.head
+    let deletedNode: DoublyLinkedListNode<T> | null = null
+    let currNode = this.head
 
-    while (currentNode) {
-      if (this.compare.equal(currentNode.value, value)) {
-        deletedNode = currentNode
+    // 遍历找值相等的节点
+    while (currNode) {
+      // 当匹配相同节点值时
+      if (this.compare.equal(currNode.value, value)) {
+        deletedNode = currNode
 
+        // 若为头节点
         if (deletedNode === this.head) {
-          // If HEAD is going to be deleted...
-
-          // Set head to second node, which will become new head.
+          // 返回
           this.head = deletedNode.next
-
-          // Set new head's previous to null.
           if (this.head) {
             this.head.previous = null
           }
-
-          // If all the nodes in list has same value that is passed as argument
-          // then all nodes will get deleted, therefore tail needs to be updated.
           if (deletedNode === this.tail) {
             this.tail = null
           }
-        } else if (deletedNode === this.tail) {
+        }
+        // 若为尾节点
+        else if (deletedNode === this.tail) {
           // If TAIL is going to be deleted...
 
           // Set tail to second last node, which will become new tail.
           this.tail = deletedNode.previous
-          this.tail.next = null
-        } else {
-          // If MIDDLE node is going to be deleted...
+          if (this.tail) {
+            this.tail.next = null
+          }
+        }
+        // 若为中间节点
+        else {
           const previousNode = deletedNode.previous
           const nextNode = deletedNode.next
 
-          previousNode.next = nextNode
-          nextNode.previous = previousNode
+          if (previousNode) {
+            previousNode.next = nextNode
+          }
+          if (nextNode) {
+            nextNode.previous = previousNode
+          }
         }
       }
 
-      currentNode = currentNode.next
+      // 若没找到相关的节点则返回
+      if (!currNode.next) {
+        break
+      }
+
+      currNode = currNode.next
     }
 
     return deletedNode
   }
 
-  find({ value = undefined, callback = undefined }): DoublyLinkedListNode {
+  find({
+    value,
+    callback
+  }: {
+    value?: any
+    callback?: Function
+  }): DoublyLinkedListNode<T> | null {
     if (!this.head) {
       return null
     }
 
-    let currentNode = this.head
+    let currNode = this.head
 
-    while (currentNode) {
+    while (currNode) {
       // If callback is specified then try to find node by callback.
-      if (callback && callback(currentNode.value)) {
-        return currentNode
+      if (callback && callback(currNode.value)) {
+        return currNode
       }
 
       // If value is specified then try to compare by value..
-      if (value !== undefined && this.compare.equal(currentNode.value, value)) {
-        return currentNode
+      if (value !== undefined && this.compare.equal(currNode.value, value)) {
+        return currNode
       }
 
-      currentNode = currentNode.next
+      // 若没找到相关的节点则返回
+      if (!currNode.next) {
+        break
+      }
+
+      currNode = currNode.next
     }
 
     return null
   }
 
-  deleteTail(): DoublyLinkedListNode {
+  deleteTail(): DoublyLinkedListNode<T> | null {
     if (!this.tail) {
       // No tail to delete.
       return null
@@ -149,12 +180,15 @@ export default class DoublyLinkedList {
     const deletedTail = this.tail
 
     this.tail = this.tail.previous
-    this.tail.next = null
+
+    if (this.tail) {
+      this.tail.next = null
+    }
 
     return deletedTail
   }
 
-  deleteHead(): DoublyLinkedListNode {
+  deleteHead(): DoublyLinkedListNode<T> | null {
     if (!this.head) {
       return null
     }
@@ -172,8 +206,8 @@ export default class DoublyLinkedList {
     return deletedHead
   }
 
-  toArray(): DoublyLinkedListNode[] {
-    const nodes = []
+  toArray(): DoublyLinkedListNode<T>[] {
+    const nodes: DoublyLinkedListNode<T>[] = []
 
     let currentNode = this.head
     while (currentNode) {
@@ -188,13 +222,13 @@ export default class DoublyLinkedList {
    * @param {*[]} values - Array of values that need to be converted to linked list.
    * @return {DoublyLinkedList}
    */
-  fromArray(values: any[]): DoublyLinkedList {
+  fromArray(values: T[]): DoublyLinkedList<T> {
     values.forEach(value => this.append(value))
 
     return this
   }
 
-  toString(callback?: any): string {
+  toString(callback?: T): string {
     return this.toArray()
       .map(node => node.toString(callback))
       .toString()
@@ -203,10 +237,10 @@ export default class DoublyLinkedList {
   /**
    * 反转
    */
-  reverse(): DoublyLinkedList {
+  reverse(): DoublyLinkedList<T> {
     let currNode = this.head
-    let prevNode = null
-    let nextNode = null
+    let prevNode: DoublyLinkedListNode<T> | null = null
+    let nextNode: DoublyLinkedListNode<T> | null = null
 
     while (currNode) {
       // Store next node.

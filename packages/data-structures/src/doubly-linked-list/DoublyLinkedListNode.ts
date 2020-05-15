@@ -1,16 +1,19 @@
-export default class DoublyLinkedListNode {
-  value: any
-  next?: DoublyLinkedListNode
-  previous?: DoublyLinkedListNode
+/**
+ * 每个节点包含上一个节点（head） 和下一个节点（tail）
+ */
+export default class DoublyLinkedListNode<T> {
+  value: T
+  next: DoublyLinkedListNode<T> | null
+  previous: DoublyLinkedListNode<T> | null
 
   constructor(
-    value: any,
-    next?: DoublyLinkedListNode,
-    previous?: DoublyLinkedListNode
+    value: T,
+    next?: DoublyLinkedListNode<T> | null,
+    previous?: DoublyLinkedListNode<T> | null
   ) {
     this.value = value
-    this.next = next
-    this.previous = previous
+    this.next = next || null
+    this.previous = previous || null
   }
 
   toString(callback?: any) {
