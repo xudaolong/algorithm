@@ -1,14 +1,11 @@
 import LinkedListNode from './LinkedListNode'
 import Comparator from '@algorithm/utils/src/comparator/Comparator'
 
-export default class LinkedList {
-  head: LinkedListNode
-  tail: LinkedListNode
+export default class LinkedList<T> {
+  head: LinkedListNode<T> | null
+  tail: LinkedListNode<T> | null
   compare: Comparator
 
-  /**
-   * @param {Function} [comparatorFunction]
-   */
   constructor(comparatorFunction?: Function) {
     this.head = null
     this.tail = null
@@ -16,7 +13,7 @@ export default class LinkedList {
     this.compare = new Comparator(comparatorFunction)
   }
 
-  prepend(value: any): LinkedList {
+  prepend(value: T): LinkedList<T> {
     // Make new node to be a head.
     const newNode = new LinkedListNode(value, this.head)
     this.head = newNode
@@ -29,11 +26,11 @@ export default class LinkedList {
     return this
   }
 
-  append(value: any): LinkedList {
+  append(value: T): LinkedList<T> {
     const newNode = new LinkedListNode(value)
 
     // If there is no head yet let's make new node a head.
-    if (!this.head) {
+    if (!this.tail) {
       this.head = newNode
       this.tail = newNode
 
@@ -47,12 +44,12 @@ export default class LinkedList {
     return this
   }
 
-  delete(value: any): LinkedListNode {
+  delete(value: T): LinkedListNode<T> | null {
     if (!this.head) {
       return null
     }
 
-    let deletedNode = null
+    let deletedNode: LinkedListNode<T> | null = null
 
     // If the head must be deleted then make next node that is differ
     // from the head to be a new head.
@@ -76,26 +73,20 @@ export default class LinkedList {
     }
 
     // Check if tail must be deleted.
-    if (this.compare.equal(this.tail.value, value)) {
+    if (this.compare.equal(this.tail?.value, value)) {
       this.tail = currentNode
     }
 
     return deletedNode
   }
 
-  /**
-   * @param {Object} findParams
-   * @param {*} findParams.value
-   * @param {function} [findParams.callback]
-   * @return {LinkedListNode}
-   */
   find({
     value,
     callback
   }: {
-    value?: any
+    value?: T
     callback?: Function
-  }): LinkedListNode {
+  }): LinkedListNode<T> | null {
     if (!this.head) {
       return null
     }
@@ -113,16 +104,17 @@ export default class LinkedList {
         return currentNode
       }
 
+      if (!currentNode.next) {
+        break
+      }
+
       currentNode = currentNode.next
     }
 
     return null
   }
 
-  /**
-   * @return {LinkedListNode}
-   */
-  deleteTail(): LinkedListNode {
+  deleteTail(): LinkedListNode<T> | null {
     const deletedTail = this.tail
 
     if (this.head === this.tail) {
@@ -133,11 +125,11 @@ export default class LinkedList {
       return deletedTail
     }
 
-    // If there are many nodes in linked list...
+    // If there are mT nodes in linked list...
 
     // Rewind to the last node and delete "next" link for the node before the last one.
     let currentNode = this.head
-    while (currentNode.next) {
+    while (currentNode?.next) {
       if (!currentNode.next.next) {
         currentNode.next = null
       } else {
@@ -150,10 +142,7 @@ export default class LinkedList {
     return deletedTail
   }
 
-  /**
-   * @return {LinkedListNode}
-   */
-  deleteHead(): LinkedListNode {
+  deleteHead(): LinkedListNode<T> | null {
     if (!this.head) {
       return null
     }
@@ -170,22 +159,21 @@ export default class LinkedList {
     return deletedHead
   }
 
-  /**
-   * @param {*[]} values - Array of values that need to be converted to linked list.
-   * @return {LinkedList}
-   */
-  fromArray(values: any[]): LinkedList {
+  fromArray(values: T[]): LinkedList<T> {
     values.forEach(value => this.append(value))
 
     return this
   }
 
-  toArray(): LinkedListNode[] {
-    const nodes: LinkedListNode[] = []
+  toArray(): LinkedListNode<T>[] {
+    const nodes: LinkedListNode<T>[] = []
 
     let currentNode = this.head
     while (currentNode) {
       nodes.push(currentNode)
+      if (!currentNode.next) {
+        break
+      }
       currentNode = currentNode.next
     }
 
@@ -198,10 +186,10 @@ export default class LinkedList {
       .toString()
   }
 
-  reverse(): LinkedList {
+  reverse(): LinkedList<T> {
     let currNode = this.head
-    let prevNode = null
-    let nextNode = null
+    let prevNode: LinkedListNode<T> | null = null
+    let nextNode: LinkedListNode<T> | null = null
 
     while (currNode) {
       // Store next node.

@@ -1,10 +1,10 @@
-class LinkedListNode {
-  value: any
-  next?: LinkedListNode
+class LinkedListNode<T> {
+  value: T
+  next: LinkedListNode<T> | null
 
-  constructor(value: any, next?: LinkedListNode) {
+  constructor(value: T, next?: LinkedListNode<T> | null) {
     this.value = value
-    this.next = next
+    this.next = next || null
   }
 
   toString(callback?: Function) {

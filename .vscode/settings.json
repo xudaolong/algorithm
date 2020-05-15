@@ -1,9 +1,10 @@
 {
   "cSpell.words": [
+    "algorithm",
     "corejs",
+    "drawio",
     "execa",
     "nircmd",
-    "algorithm",
     "postbuild",
     "prebuild",
     "storyshots",

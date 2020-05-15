@@ -6,14 +6,11 @@ import LinkedList from '../linked-list/LinkedList'
 // are being handled.
 const defaultHashTableSize = 32
 
-export default class HashTable {
-  buckets: LinkedList[]
+export default class HashTable<R extends { key: string; value: any }> {
+  buckets: LinkedList<R>[]
   keys: {}
 
-  /**
-   * @param {number} hashTableSize
-   */
-  constructor(hashTableSize = defaultHashTableSize) {
+  constructor(hashTableSize: number = defaultHashTableSize) {
     // Create hash table of certain size and fill each bucket with empty linked list.
     this.buckets = Array(hashTableSize)
       .fill(null)
@@ -23,13 +20,7 @@ export default class HashTable {
     this.keys = {}
   }
 
-  /**
-   * Converts key string to hash number.
-   *
-   * @param {string} key
-   * @return {number}
-   */
-  hash(key) {
+  hash(key: string): number {
     // For simplicity reasons we will just use character codes sum of all characters of the key
     // to calculate the hash.
     //
@@ -49,11 +40,7 @@ export default class HashTable {
     return hash % this.buckets.length
   }
 
-  /**
-   * @param {string} key
-   * @param {*} value
-   */
-  set(key, value) {
+  set(key: string, value: any) {
     const keyHash = this.hash(key)
     this.keys[key] = keyHash
     const bucketLinkedList = this.buckets[keyHash]
@@ -63,18 +50,14 @@ export default class HashTable {
 
     if (!node) {
       // Insert new node.
-      bucketLinkedList.append({ key, value })
+      bucketLinkedList.append({ key, value } as R)
     } else {
       // Update value of existing node.
       node.value.value = value
     }
   }
 
-  /**
-   * @param {string} key
-   * @return {*}
-   */
-  delete(key) {
+  delete(key: string): any {
     const keyHash = this.hash(key)
     delete this.keys[key]
     const bucketLinkedList = this.buckets[keyHash]
@@ -89,11 +72,7 @@ export default class HashTable {
     return null
   }
 
-  /**
-   * @param {string} key
-   * @return {*}
-   */
-  get(key) {
+  get(key: string): any {
     const bucketLinkedList = this.buckets[this.hash(key)]
     const node = bucketLinkedList.find({
       callback: nodeValue => nodeValue.key === key
@@ -106,14 +85,14 @@ export default class HashTable {
    * @param {string} key
    * @return {boolean}
    */
-  has(key) {
+  has(key: string): boolean {
     return Object.hasOwnProperty.call(this.keys, key)
   }
 
   /**
    * @return {string[]}
    */
-  getKeys() {
+  getKeys(): string[] {
     return Object.keys(this.keys)
   }
 }

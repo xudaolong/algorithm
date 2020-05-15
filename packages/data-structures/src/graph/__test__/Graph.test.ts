@@ -92,7 +92,7 @@ describe('Graph', () => {
     expect(graphEdgeCA).toBeNull()
     expect(graphEdgeAB).toEqual(edgeAB)
     expect(graphEdgeBA).toEqual(edgeAB)
-    expect(graphEdgeAB.weight).toBe(10)
+    expect(graphEdgeAB?.weight).toBe(10)
   })
 
   it('should find edge by vertices in directed graph', () => {
@@ -115,7 +115,7 @@ describe('Graph', () => {
     expect(graphEdgeCA).toBeNull()
     expect(graphEdgeBA).toBeNull()
     expect(graphEdgeAB).toEqual(edgeAB)
-    expect(graphEdgeAB.weight).toBe(10)
+    expect(graphEdgeAB?.weight).toBe(10)
   })
 
   it('should return vertex neighbors', () => {

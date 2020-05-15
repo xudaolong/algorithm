@@ -2,17 +2,6 @@ import GraphVertex from '../GraphVertex'
 import GraphEdge from '../GraphEdge'
 
 describe('GraphVertex', () => {
-  it('should throw an error when trying to create vertex without value', () => {
-    let vertex = null
-
-    function createEmptyVertex() {
-      vertex = new GraphVertex()
-    }
-
-    expect(vertex).toBeNull()
-    expect(createEmptyVertex).toThrow()
-  })
-
   it('should create graph vertex', () => {
     const vertex = new GraphVertex('A')
 

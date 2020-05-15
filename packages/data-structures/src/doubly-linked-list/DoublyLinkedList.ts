@@ -3,16 +3,18 @@ import Comparator from '@algorithm/utils/src/comparator/Comparator'
 
 /**
  * 双向链表
- * - 若干个节点组成，每个节点包含上一个节点（head） 和下一个节点（tail）
+ * - 无长度
+ * - 若干个节点组成，每个节点包含上一个节点（previous） 和下一个节点（next）
+ * - 添加和删除时需要维护双指针
  */
 export default class DoublyLinkedList<T> {
-  // 仅当维护增删改查用
-  head: DoublyLinkedListNode<T> | null // 相对当前节点的上一个节点
-  tail: DoublyLinkedListNode<T> | null // 相对当前节点的下一个节点
+  // 双指针仅当维护增删改查用
+  head: DoublyLinkedListNode<T> | null // 头指针
+  tail: DoublyLinkedListNode<T> | null // 尾指针
   compare: Comparator
 
   /**
-   * 无需指定链表的长度
+   * 无需指定链表的长度, 示意图: img/empty.drawio.svg
    */
   constructor(comparatorFunction?: Function) {
     this.head = null
@@ -21,21 +23,24 @@ export default class DoublyLinkedList<T> {
   }
 
   /**
-   *  左添加（代替当前上一个节点）时需要同时维护 head 和 tail 分支
+   *  左添加（代替当前上一个节点）时需要同时维护 head 和 tail 指针
    *  - 处理新节点的next和当前节点的previous
    */
   prepend(value: T): DoublyLinkedList<T> {
+    // 默认将当前头指针为改节点的next节点
     const node = new DoublyLinkedListNode(value, this.head, null)
 
-    // 空链表时标志头尾为自身
+    // 空指针时代表为新链表, 双指针指向新节点
     if (!this.head) {
       this.head = node
       this.tail = node
       return this
     }
 
-    // 若非空链表时，则切换头的指向
+    // 若非空链表时
+    // 修改当前指针节点的上一个节点
     this.head.previous = node
+    // 修改当前头指针
     this.head = node
 
     return this
@@ -46,24 +51,27 @@ export default class DoublyLinkedList<T> {
    *  - 处理新节点的previous和当前节点的next
    */
   append(value: T): DoublyLinkedList<T> {
+    // 默认将当前尾指针为改节点的previous节点
     const node = new DoublyLinkedListNode(value, null, this.tail)
 
-    // 空链表时标志头尾为自身
+    // 空指针时代表为新链表, 双指针指向新节点
     if (!this.tail) {
       this.head = node
       this.tail = node
       return this
     }
 
-    // 若非空链表时，则切换尾的指向
+    // 若非空链表时
+    // 修改当前指针节点的下一个节点
     this.tail.next = node
+    // 修改当前尾指针
     this.tail = node
 
     return this
   }
 
   /**
-   * 删除时需要同时维护 head 和 tail 分支
+   * 删除时需要同时维护 head 和 tail 指针
    */
   delete(value: T): DoublyLinkedListNode<T> | null {
     // 空链表
@@ -80,7 +88,7 @@ export default class DoublyLinkedList<T> {
       if (this.compare.equal(currNode.value, value)) {
         deletedNode = currNode
 
-        // 若为头节点
+        // 若为HEAD指针
         if (deletedNode === this.head) {
           // 返回
           this.head = deletedNode.next
@@ -91,17 +99,14 @@ export default class DoublyLinkedList<T> {
             this.tail = null
           }
         }
-        // 若为尾节点
+        // 若为TAIL指针
         else if (deletedNode === this.tail) {
-          // If TAIL is going to be deleted...
-
-          // Set tail to second last node, which will become new tail.
           this.tail = deletedNode.previous
           if (this.tail) {
             this.tail.next = null
           }
         }
-        // 若为中间节点
+        // 若为中间节点, 不需要修改双指针
         else {
           const previousNode = deletedNode.previous
           const nextNode = deletedNode.next

@@ -28,7 +28,7 @@ describe('LinkedListNode', () => {
   })
 
   it('should convert node to string', () => {
-    const node = new LinkedListNode(1)
+    const node = new LinkedListNode<string>('1')
 
     expect(node.toString()).toBe('1')
 

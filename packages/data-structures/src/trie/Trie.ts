@@ -4,6 +4,8 @@ import TrieNode from './TrieNode'
 const HEAD_CHARACTER = '*'
 
 export default class Trie {
+  head: TrieNode
+
   constructor() {
     this.head = new TrieNode(HEAD_CHARACTER)
   }

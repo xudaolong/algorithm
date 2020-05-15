@@ -1,9 +1,9 @@
 import GraphVertex from './GraphVertex'
 import GraphEdge from './GraphEdge'
 
-export default class Graph {
-  vertices: {}
-  edges: {}
+export default class Graph<T> {
+  vertices: { [key: string]: GraphVertex<T> }
+  edges: { [key: string]: GraphEdge<T> }
   isDirected: boolean
 
   constructor(isDirected = false) {
@@ -12,7 +12,7 @@ export default class Graph {
     this.isDirected = isDirected
   }
 
-  addVertex(newVertex: GraphVertex): Graph {
+  addVertex(newVertex: GraphVertex<T>): Graph<T> {
     this.vertices[newVertex.getKey()] = newVertex
 
     return this
@@ -22,19 +22,19 @@ export default class Graph {
     return this.vertices[vertexKey]
   }
 
-  getNeighbors(vertex: GraphVertex): GraphVertex[] {
+  getNeighbors(vertex: GraphVertex<T>): GraphVertex<T>[] {
     return vertex.getNeighbors()
   }
 
-  getAllVertices(): GraphVertex[] {
+  getAllVertices(): GraphVertex<T>[] {
     return Object.values(this.vertices)
   }
 
-  getAllEdges(): GraphEdge[] {
+  getAllEdges(): GraphEdge<T>[] {
     return Object.values(this.edges)
   }
 
-  addEdge(edge: GraphEdge): Graph {
+  addEdge(edge: GraphEdge<T>): Graph<T> {
     // Try to find and end start vertices.
     let startVertex = this.getVertexByKey(edge.startVertex.getKey())
     let endVertex = this.getVertexByKey(edge.endVertex.getKey())
@@ -71,7 +71,7 @@ export default class Graph {
     return this
   }
 
-  deleteEdge(edge: GraphEdge) {
+  deleteEdge(edge: GraphEdge<T>) {
     // Delete edge from the list of edges.
     if (this.edges[edge.getKey()]) {
       delete this.edges[edge.getKey()]
@@ -87,7 +87,10 @@ export default class Graph {
     endVertex.deleteEdge(edge)
   }
 
-  findEdge(startVertex: GraphVertex, endVertex: GraphVertex): GraphEdge | null {
+  findEdge(
+    startVertex: GraphVertex<T>,
+    endVertex: GraphVertex<T>
+  ): GraphEdge<T> | null {
     const vertex = this.getVertexByKey(startVertex.getKey())
 
     if (!vertex) {
@@ -97,9 +100,6 @@ export default class Graph {
     return vertex.findEdge(endVertex)
   }
 
-  /**
-   * @return {number}
-   */
   getWeight(): number {
     return this.getAllEdges().reduce((weight, graphEdge) => {
       return weight + graphEdge.weight
@@ -108,9 +108,8 @@ export default class Graph {
 
   /**
    * Reverse all the edges in directed graph.
-   * @return {Graph}
    */
-  reverse(): Graph {
+  reverse(): Graph<T> {
     /** @param {GraphEdge} edge */
     this.getAllEdges().forEach(edge => {
       // Delete straight edge from graph and from vertices.
@@ -167,9 +166,6 @@ export default class Graph {
     return adjacencyMatrix
   }
 
-  /**
-   * @return {string}
-   */
   toString(): string {
     return Object.keys(this.vertices).toString()
   }

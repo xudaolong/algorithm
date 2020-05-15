@@ -2,22 +2,16 @@ import LinkedList from '../linked-list/LinkedList'
 import GraphEdge from './GraphEdge'
 import LinkedListNode from '../linked-list/LinkedListNode'
 
-export default class GraphVertex {
-  value: any
-  edges: LinkedList
-  /**
-   * @param {*} value
-   */
-  constructor(value: any) {
+export default class GraphVertex<T> {
+  value: string
+  edges: LinkedList<GraphEdge<T>>
+
+  constructor(value: string) {
     if (value === undefined) {
       throw new Error('Graph vertex must have a value')
     }
 
-    /**
-     * @param {GraphEdge} edgeA
-     * @param {GraphEdge} edgeB
-     */
-    const edgeComparator = (edgeA: GraphEdge, edgeB: GraphEdge) => {
+    const edgeComparator = (edgeA: GraphEdge<T>, edgeB: GraphEdge<T>) => {
       if (edgeA.getKey() === edgeB.getKey()) {
         return 0
       }
@@ -31,31 +25,21 @@ export default class GraphVertex {
     this.edges = new LinkedList(edgeComparator)
   }
 
-  /**
-   * @param {GraphEdge} edge
-   * @returns {GraphVertex}
-   */
-  addEdge(edge: GraphEdge): GraphVertex {
+  addEdge(edge: GraphEdge<T>): GraphVertex<T> {
     this.edges.append(edge)
 
     return this
   }
 
-  /**
-   * @param {GraphEdge} edge
-   */
-  deleteEdge(edge: GraphEdge) {
+  deleteEdge(edge: GraphEdge<T>) {
     this.edges.delete(edge)
   }
 
-  /**
-   * @returns {GraphVertex[]}
-   */
-  getNeighbors(): GraphVertex[] {
+  getNeighbors(): GraphVertex<T>[] {
     const edges = this.edges.toArray()
 
     /** @param {LinkedListNode} node */
-    const neighborsConverter = (node: LinkedListNode) => {
+    const neighborsConverter = (node: LinkedListNode<GraphEdge<T>>) => {
       return node.value.startVertex === this
         ? node.value.endVertex
         : node.value.startVertex
@@ -66,53 +50,37 @@ export default class GraphVertex {
     return edges.map(neighborsConverter)
   }
 
-  /**
-   * @return {GraphEdge[]}
-   */
-  getEdges(): GraphEdge[] {
+  getEdges(): GraphEdge<T>[] {
     return this.edges.toArray().map(linkedListNode => linkedListNode.value)
   }
 
-  /**
-   * @return {number}
-   */
   getDegree(): number {
     return this.edges.toArray().length
   }
 
-  /**
-   * @param {GraphEdge} requiredEdge
-   * @returns {boolean}
-   */
-  hasEdge(requiredEdge: GraphEdge): boolean {
+  hasEdge(requiredEdge: GraphEdge<T>): boolean {
     const edgeNode = this.edges.find({
-      callback: (edge: GraphEdge) => edge === requiredEdge
+      callback: (edge: GraphEdge<T>) => edge === requiredEdge
     })
 
     return !!edgeNode
   }
 
-  /**
-   * @param {GraphVertex} vertex
-   * @returns {boolean}
-   */
-  hasNeighbor(vertex: GraphVertex): boolean {
+  hasNeighbor(vertex: GraphVertex<T>): boolean {
     const vertexNode = this.edges.find({
-      callback: (edge: { startVertex: GraphVertex; endVertex: GraphVertex }) =>
-        edge.startVertex === vertex || edge.endVertex === vertex
+      callback: (edge: {
+        startVertex: GraphVertex<T>
+        endVertex: GraphVertex<T>
+      }) => edge.startVertex === vertex || edge.endVertex === vertex
     })
 
     return !!vertexNode
   }
 
-  /**
-   * @param {GraphVertex} vertex
-   * @returns {(GraphEdge|null)}
-   */
-  findEdge(vertex: GraphVertex): GraphEdge | null {
+  findEdge(vertex: GraphVertex<T>): GraphEdge<T> | null {
     const edgeFinder = (edge: {
-      startVertex: GraphVertex
-      endVertex: GraphVertex
+      startVertex: GraphVertex<T>
+      endVertex: GraphVertex<T>
     }) => {
       return edge.startVertex === vertex || edge.endVertex === vertex
     }
@@ -122,23 +90,17 @@ export default class GraphVertex {
     return edge ? edge.value : null
   }
 
-  /**
-   * @returns {string}
-   */
   getKey(): string {
     return this.value
   }
 
-  /**
-   * @return {GraphVertex}
-   */
-  deleteAllEdges(): GraphVertex {
+  deleteAllEdges(): GraphVertex<T> {
     this.getEdges().forEach(edge => this.deleteEdge(edge))
 
     return this
   }
 
-  toString(callback: Function): string {
+  toString(callback?: Function): string {
     return callback ? callback(this.value) : `${this.value}`
   }
 }
