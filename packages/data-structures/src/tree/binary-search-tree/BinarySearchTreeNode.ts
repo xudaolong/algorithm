@@ -1,24 +1,18 @@
 import BinaryTreeNode from '../BinaryTreeNode'
 import Comparator from '@algorithm/utils/src/comparator/Comparator'
 
-export default class BinarySearchTreeNode extends BinaryTreeNode {
-  /**
-   * @param {*} [value] - node value.
-   * @param {function} [compareFunction] - comparator function for node values.
-   */
-  constructor(value = null, compareFunction = undefined) {
-    super(value)
+export default class BinarySearchTreeNode<T> extends BinaryTreeNode<T> {
+  compareFunction: Function | undefined
+  nodeValueComparator: Comparator
 
+  constructor(value: T | null, compareFunction?: Function) {
+    super(value)
     // This comparator is used to compare node values with each other.
     this.compareFunction = compareFunction
     this.nodeValueComparator = new Comparator(compareFunction)
   }
 
-  /**
-   * @param {*} value
-   * @return {BinarySearchTreeNode}
-   */
-  insert(value) {
+  insert(value: T): BinarySearchTreeNode<T> {
     if (this.nodeValueComparator.equal(this.value, null)) {
       this.value = value
 
@@ -28,10 +22,10 @@ export default class BinarySearchTreeNode extends BinaryTreeNode {
     if (this.nodeValueComparator.lessThan(value, this.value)) {
       // Insert to the left.
       if (this.left) {
-        return this.left.insert(value)
+        return (this.left as BinarySearchTreeNode<T>).insert(value)
       }
 
-      const newNode = new BinarySearchTreeNode(value, this.compareFunction)
+      const newNode = new BinarySearchTreeNode<T>(value, this.compareFunction)
       this.setLeft(newNode)
 
       return newNode
@@ -40,10 +34,10 @@ export default class BinarySearchTreeNode extends BinaryTreeNode {
     if (this.nodeValueComparator.greaterThan(value, this.value)) {
       // Insert to the right.
       if (this.right) {
-        return this.right.insert(value)
+        return (this.right as BinarySearchTreeNode<T>).insert(value)
       }
 
-      const newNode = new BinarySearchTreeNode(value, this.compareFunction)
+      const newNode = new BinarySearchTreeNode<T>(value, this.compareFunction)
       this.setRight(newNode)
 
       return newNode
@@ -56,7 +50,7 @@ export default class BinarySearchTreeNode extends BinaryTreeNode {
    * @param {*} value
    * @return {BinarySearchTreeNode}
    */
-  find(value) {
+  find(value: T | null | undefined): BinarySearchTreeNode<T> | null {
     // Check the root.
     if (this.nodeValueComparator.equal(this.value, value)) {
       return this
@@ -64,30 +58,22 @@ export default class BinarySearchTreeNode extends BinaryTreeNode {
 
     if (this.nodeValueComparator.lessThan(value, this.value) && this.left) {
       // Check left nodes.
-      return this.left.find(value)
+      return (this.left as BinarySearchTreeNode<T>).find(value)
     }
 
     if (this.nodeValueComparator.greaterThan(value, this.value) && this.right) {
       // Check right nodes.
-      return this.right.find(value)
+      return (this.right as BinarySearchTreeNode<T>).find(value)
     }
 
     return null
   }
 
-  /**
-   * @param {*} value
-   * @return {boolean}
-   */
-  contains(value) {
+  contains(value: T): boolean {
     return !!this.find(value)
   }
 
-  /**
-   * @param {*} value
-   * @return {boolean}
-   */
-  remove(value) {
+  remove(value: T | null | undefined): boolean {
     const nodeToRemove = this.find(value)
 
     if (!nodeToRemove) {
@@ -109,7 +95,9 @@ export default class BinarySearchTreeNode extends BinaryTreeNode {
       // Node has two children.
       // Find the next biggest value (minimum value in the right branch)
       // and replace current value node with that next biggest value.
-      const nextBiggerNode = nodeToRemove.right.findMin()
+      const nextBiggerNode = (nodeToRemove.right as BinarySearchTreeNode<
+        T
+      >).findMin()
       if (!this.nodeComparator.equal(nextBiggerNode, nodeToRemove.right)) {
         this.remove(nextBiggerNode.value)
         nodeToRemove.setValue(nextBiggerNode.value)
@@ -127,7 +115,7 @@ export default class BinarySearchTreeNode extends BinaryTreeNode {
 
       if (parent) {
         parent.replaceChild(nodeToRemove, childNode)
-      } else {
+      } else if (childNode) {
         BinaryTreeNode.copyNode(childNode, nodeToRemove)
       }
     }
@@ -141,11 +129,11 @@ export default class BinarySearchTreeNode extends BinaryTreeNode {
   /**
    * @return {BinarySearchTreeNode}
    */
-  findMin() {
+  findMin(): BinarySearchTreeNode<T> {
     if (!this.left) {
       return this
     }
 
-    return this.left.findMin()
+    return (this.left as BinarySearchTreeNode<T>).findMin()
   }
 }

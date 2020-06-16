@@ -1,9 +1,9 @@
 import HashTable from '../hash-table/HashTable'
 
-export default class TrieNode {
+export default class TrieNode<T> {
   character: string
   isCompleteWord: boolean
-  children: HashTable
+  children: HashTable<{ key: string; value: T }>
   /**
    * @param {string} character
    * @param {boolean} isCompleteWord
@@ -14,20 +14,11 @@ export default class TrieNode {
     this.children = new HashTable()
   }
 
-  /**
-   * @param {string} character
-   * @return {TrieNode}
-   */
-  getChild(character) {
+  getChild(character: string): TrieNode<T> {
     return this.children.get(character)
   }
 
-  /**
-   * @param {string} character
-   * @param {boolean} isCompleteWord
-   * @return {TrieNode}
-   */
-  addChild(character, isCompleteWord = false) {
+  addChild(character: string, isCompleteWord = false): TrieNode<T> {
     if (!this.children.has(character)) {
       this.children.set(character, new TrieNode(character, isCompleteWord))
     }
@@ -40,11 +31,7 @@ export default class TrieNode {
     return childNode
   }
 
-  /**
-   * @param {string} character
-   * @return {TrieNode}
-   */
-  removeChild(character) {
+  removeChild(character: string): TrieNode<T> {
     const childNode = this.getChild(character)
 
     // Delete childNode only if:
@@ -57,33 +44,22 @@ export default class TrieNode {
     return this
   }
 
-  /**
-   * @param {string} character
-   * @return {boolean}
-   */
-  hasChild(character) {
+  hasChild(character: string): boolean {
     return this.children.has(character)
   }
 
   /**
    * Check whether current TrieNode has children or not.
-   * @return {boolean}
    */
-  hasChildren() {
+  hasChildren(): boolean {
     return this.children.getKeys().length !== 0
   }
 
-  /**
-   * @return {string[]}
-   */
-  suggestChildren() {
+  suggestChildren(): string[] {
     return [...this.children.getKeys()]
   }
 
-  /**
-   * @return {string}
-   */
-  toString() {
+  toString(): string {
     let childrenAsString = this.suggestChildren().toString()
     childrenAsString = childrenAsString ? `:${childrenAsString}` : ''
     const isCompleteString = this.isCompleteWord ? '*' : ''

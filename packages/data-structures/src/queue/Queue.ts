@@ -1,6 +1,8 @@
 import LinkedList from '../linked-list/LinkedList'
 
-export default class Queue {
+export default class Queue<T> {
+  linkedList: LinkedList<T>
+
   constructor() {
     // We're going to implement Queue based on LinkedList since the two
     // structures are quite similar. Namely, they both operate mostly on
@@ -9,18 +11,14 @@ export default class Queue {
     this.linkedList = new LinkedList()
   }
 
-  /**
-   * @return {boolean}
-   */
-  isEmpty() {
+  isEmpty(): boolean {
     return !this.linkedList.head
   }
 
   /**
    * Read the element at the front of the queue without removing it.
-   * @return {*}
    */
-  peek() {
+  peek(): T | null {
     if (!this.linkedList.head) {
       return null
     }
@@ -31,27 +29,21 @@ export default class Queue {
   /**
    * Add a new element to the end of the queue (the tail of the linked list).
    * This element will be processed after all elements ahead of it.
-   * @param {*} value
    */
-  enqueue(value) {
+  enqueue(value: T) {
     this.linkedList.append(value)
   }
 
   /**
    * Remove the element at the front of the queue (the head of the linked list).
    * If the queue is empty, return null.
-   * @return {*}
    */
-  dequeue() {
+  dequeue(): T | null {
     const removedHead = this.linkedList.deleteHead()
     return removedHead ? removedHead.value : null
   }
 
-  /**
-   * @param [callback]
-   * @return {string}
-   */
-  toString(callback) {
+  toString(callback?: Function): string {
     // Return string representation of the queue's linked list.
     return this.linkedList.toString(callback)
   }

@@ -2,7 +2,7 @@ import BinaryTreeNode from '../BinaryTreeNode'
 
 describe('BinaryTreeNode', () => {
   it('should create node', () => {
-    const node = new BinaryTreeNode()
+    const node = new BinaryTreeNode<number>()
 
     expect(node).toBeDefined()
 
@@ -17,8 +17,8 @@ describe('BinaryTreeNode', () => {
     rootNode.setLeft(leftNode).setRight(rightNode)
 
     expect(rootNode.value).toBe(2)
-    expect(rootNode.left.value).toBe(1)
-    expect(rootNode.right.value).toBe(3)
+    expect(rootNode.left?.value).toBe(1)
+    expect(rootNode.right?.value).toBe(3)
   })
 
   it('should set parent', () => {
@@ -29,9 +29,9 @@ describe('BinaryTreeNode', () => {
     rootNode.setLeft(leftNode).setRight(rightNode)
 
     expect(rootNode.parent).toBeNull()
-    expect(rootNode.left.parent.value).toBe(2)
-    expect(rootNode.right.parent.value).toBe(2)
-    expect(rootNode.right.parent).toEqual(rootNode)
+    expect(rootNode.left?.parent?.value).toBe(2)
+    expect(rootNode.right?.parent?.value).toBe(2)
+    expect(rootNode.right?.parent).toEqual(rootNode)
   })
 
   it('should traverse node', () => {
@@ -79,14 +79,14 @@ describe('BinaryTreeNode', () => {
 
     expect(rootNode.traverseInOrder()).toEqual([1, 2, 3, 5])
 
-    expect(rootNode.replaceChild(rootNode.right, rootNode.right.right)).toBe(
+    expect(rootNode.replaceChild(rootNode.right, rootNode?.right?.right)).toBe(
       true
     )
-    expect(rootNode.right.value).toBe(5)
-    expect(rootNode.right.right).toBeNull()
+    expect(rootNode.right?.value).toBe(5)
+    expect(rootNode.right?.right).toBeNull()
     expect(rootNode.traverseInOrder()).toEqual([1, 2, 5])
 
-    expect(rootNode.replaceChild(rootNode.right, rootNode.right.right)).toBe(
+    expect(rootNode.replaceChild(rootNode.right, rootNode.right?.right)).toBe(
       false
     )
     expect(rootNode.traverseInOrder()).toEqual([1, 2, 5])
@@ -156,8 +156,8 @@ describe('BinaryTreeNode', () => {
     root.setLeft(left)
     root.setRight(right)
 
-    expect(root.left.value).toBe(1)
-    expect(root.right.value).toBe(3)
+    expect(root.left?.value).toBe(1)
+    expect(root.right?.value).toBe(3)
 
     root.setLeft(null)
     root.setRight(null)
@@ -177,7 +177,7 @@ describe('BinaryTreeNode', () => {
 
     expect(node1.value).toEqual(obj1)
     expect(node2.value).toEqual(obj2)
-    expect(node1.left.value).toEqual(obj2)
+    expect(node1.left?.value).toEqual(obj2)
 
     node1.removeChild(node2)
 

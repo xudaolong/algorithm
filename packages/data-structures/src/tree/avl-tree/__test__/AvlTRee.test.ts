@@ -22,7 +22,7 @@ describe('AvlTree', () => {
 
     expect(tree.toString()).toBe('0,1,2,3,4')
     expect(tree.root.value).toBe(3)
-    expect(tree.root.left.value).toBe(1)
+    expect(tree.root.left?.value).toBe(1)
     expect(tree.root.height).toBe(2)
   })
 
@@ -70,7 +70,7 @@ describe('AvlTree', () => {
 
     expect(tree.toString()).toBe('2,3,4,5,6')
     expect(tree.root.value).toBe(3)
-    expect(tree.root.right.value).toBe(5)
+    expect(tree.root.right?.value).toBe(5)
     expect(tree.root.height).toBe(2)
   })
 
@@ -244,8 +244,8 @@ describe('AvlTree', () => {
 
     expect(tree.toString()).toBe('20,30,40')
     expect(tree.root.value).toBe(30)
-    expect(tree.root.left.value).toBe(20)
-    expect(tree.root.right.value).toBe(40)
+    expect(tree.root.left?.value).toBe(20)
+    expect(tree.root.right?.value).toBe(40)
     expect(tree.root.balanceFactor).toBe(0)
   })
 
@@ -263,8 +263,8 @@ describe('AvlTree', () => {
 
     expect(tree.toString()).toBe('5,10,20')
     expect(tree.root.value).toBe(10)
-    expect(tree.root.left.value).toBe(5)
-    expect(tree.root.right.value).toBe(20)
+    expect(tree.root.left?.value).toBe(5)
+    expect(tree.root.right?.value).toBe(20)
     expect(tree.root.balanceFactor).toBe(0)
   })
 

@@ -90,7 +90,7 @@ describe('RedBlackTree', () => {
 
     const node7 = tree.insert(4)
 
-    expect(tree.root.left.value).toEqual(node2.value)
+    expect(tree.root.left?.value).toEqual(node2.value)
 
     expect(tree.toString()).toBe('-20,-10,4,6,10,20,25')
     expect(tree.root.height).toBe(3)
@@ -267,12 +267,12 @@ describe('RedBlackTree', () => {
     const node7 = tree.insert(25)
 
     const rightNode = tree.root.right
-    const rightLeftNode = rightNode.left
-    const rightRightNode = rightNode.right
+    const rightLeftNode = rightNode?.left
+    const rightRightNode = rightNode?.right
 
-    expect(rightNode.value).toBe(node7.value)
-    expect(rightLeftNode.value).toBe(node3.value)
-    expect(rightRightNode.value).toBe(node6.value)
+    expect(rightNode?.value).toBe(node7.value)
+    expect(rightLeftNode?.value).toBe(node3.value)
+    expect(rightRightNode?.value).toBe(node6.value)
 
     expect(tree.toString()).toBe('-20,-10,6,10,20,25,30')
     expect(tree.root.height).toBe(2)

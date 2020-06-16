@@ -18,6 +18,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   modulePathIgnorePatterns: ['dist'],
   moduleNameMapper: {
+    '@algorithm/core/(.+)$': '<rootDir>packages/algorithms/$1',
     '@algorithm/(.+)$': '<rootDir>packages/$1'
   },
   notify: true,

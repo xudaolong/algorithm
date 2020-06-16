@@ -1,12 +1,20 @@
-import isPowerOfTwo from '../../../algorithms/math/is-power-of-two/isPowerOfTwo'
+import isPowerOfTwo from '@algorithm/core/src/math/is-power-of-two/isPowerOfTwo'
 
 export default class SegmentTree {
+  inputArray: number[]
+  operation: any
+  operationFallback: number
+  segmentTree: number[]
   /**
    * @param {number[]} inputArray
    * @param {function} operation - binary function (i.e. sum, min)
    * @param {number} operationFallback - operation fallback value (i.e. 0 for sum, Infinity for min)
    */
-  constructor(inputArray, operation, operationFallback) {
+  constructor(
+    inputArray: number[],
+    operation: Function,
+    operationFallback: number
+  ) {
     this.inputArray = inputArray
     this.operation = operation
     this.operationFallback = operationFallback
@@ -21,7 +29,7 @@ export default class SegmentTree {
    * @param {number[]} inputArray
    * @return {number[]}
    */
-  initSegmentTree(inputArray) {
+  initSegmentTree(inputArray: number[]): number[] {
     let segmentTreeArrayLength
     const inputArrayLength = inputArray.length
 
@@ -59,7 +67,11 @@ export default class SegmentTree {
    * @param {number} rightInputIndex
    * @param {number} position
    */
-  buildTreeRecursively(leftInputIndex, rightInputIndex, position) {
+  buildTreeRecursively(
+    leftInputIndex: number,
+    rightInputIndex: number,
+    position: number
+  ) {
     // If low input index and high input index are equal that would mean
     // the we have finished splitting and we are already came to the leaf
     // of the segment tree. We need to copy this leaf value from input
@@ -99,7 +111,7 @@ export default class SegmentTree {
    * @param {number} queryRightIndex
    * @return {number}
    */
-  rangeQuery(queryLeftIndex, queryRightIndex) {
+  rangeQuery(queryLeftIndex: number, queryRightIndex: number): number {
     const leftIndex = 0
     const rightIndex = this.inputArray.length - 1
     const position = 0
@@ -124,12 +136,12 @@ export default class SegmentTree {
    * @return {number}
    */
   rangeQueryRecursive(
-    queryLeftIndex,
-    queryRightIndex,
-    leftIndex,
-    rightIndex,
-    position
-  ) {
+    queryLeftIndex: number,
+    queryRightIndex: number,
+    leftIndex: number,
+    rightIndex: number,
+    position: number
+  ): number {
     if (queryLeftIndex <= leftIndex && queryRightIndex >= rightIndex) {
       // Total overlap.
       return this.segmentTree[position]
@@ -167,7 +179,7 @@ export default class SegmentTree {
    * @param {number} parentIndex
    * @return {number}
    */
-  getLeftChildIndex(parentIndex) {
+  getLeftChildIndex(parentIndex: number): number {
     return 2 * parentIndex + 1
   }
 
@@ -176,7 +188,7 @@ export default class SegmentTree {
    * @param {number} parentIndex
    * @return {number}
    */
-  getRightChildIndex(parentIndex) {
+  getRightChildIndex(parentIndex: number): number {
     return 2 * parentIndex + 2
   }
 }

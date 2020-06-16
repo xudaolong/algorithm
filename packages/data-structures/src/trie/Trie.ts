@@ -3,18 +3,14 @@ import TrieNode from './TrieNode'
 // Character that we will use for trie tree root.
 const HEAD_CHARACTER = '*'
 
-export default class Trie {
-  head: TrieNode
+export default class Trie<T> {
+  head: TrieNode<T>
 
   constructor() {
     this.head = new TrieNode(HEAD_CHARACTER)
   }
 
-  /**
-   * @param {string} word
-   * @return {Trie}
-   */
-  addWord(word) {
+  addWord(word: string): Trie<T> {
     const characters = Array.from(word)
     let currentNode = this.head
 
@@ -26,11 +22,7 @@ export default class Trie {
     return this
   }
 
-  /**
-   * @param {string} word
-   * @return {Trie}
-   */
-  deleteWord(word) {
+  deleteWord(word: string): Trie<T> {
     const depthFirstDelete = (currentNode, charIndex = 0) => {
       if (charIndex >= word.length) {
         // Return if we're trying to delete the character that is out of word's scope.
@@ -65,11 +57,7 @@ export default class Trie {
     return this
   }
 
-  /**
-   * @param {string} word
-   * @return {string[]}
-   */
-  suggestNextCharacters(word) {
+  suggestNextCharacters(word: string): string[] | null {
     const lastCharacter = this.getLastCharacterNode(word)
 
     if (!lastCharacter) {
@@ -81,21 +69,14 @@ export default class Trie {
 
   /**
    * Check if complete word exists in Trie.
-   *
-   * @param {string} word
-   * @return {boolean}
    */
-  doesWordExist(word) {
+  doesWordExist(word: string): boolean {
     const lastCharacter = this.getLastCharacterNode(word)
 
     return !!lastCharacter && lastCharacter.isCompleteWord
   }
 
-  /**
-   * @param {string} word
-   * @return {TrieNode}
-   */
-  getLastCharacterNode(word) {
+  getLastCharacterNode(word: string): TrieNode<T> | null {
     const characters = Array.from(word)
     let currentNode = this.head
 
